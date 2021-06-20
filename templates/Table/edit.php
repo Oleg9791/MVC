@@ -1,5 +1,5 @@
 <?php
-//print_r($this->data);
+print_r($this->data);
 ?>
 <form action="?type=Table&action=edit&id=<?= $this->data['id'] ?>" method='post'>
     <?php
@@ -13,3 +13,4 @@
     <input type="submit" value="ok" class="btn btn-primary">
 
 </form>
+

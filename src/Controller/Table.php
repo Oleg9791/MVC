@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use W1020\Table as ORMTable;
-use App\View\View;
+//use App\View\View;
 
 class Table extends AbstractController
 {
