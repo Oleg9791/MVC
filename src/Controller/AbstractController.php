@@ -20,4 +20,9 @@ abstract class  AbstractController
         header("Location:$url");
 
     }
+
+    public function getCurrentClass(): string
+    {
+        return (new \ReflectionClass($this))->getShortName();
+    }
 }

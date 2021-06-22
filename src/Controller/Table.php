@@ -3,17 +3,21 @@
 namespace App\Controller;
 
 use W1020\Table as ORMTable;
+
 //use App\View\View;
 
-class Table extends AbstractController
+abstract class Table extends AbstractController
 {
+    protected string $tableName = "";
     protected ORMTable $model;
+
 //    protected View $view;
 
     public function __construct()
     {
         parent::__construct();
         $config = include __DIR__ . "/../../Config.php";
+        $config['table'] = $this->tableName;
 //        print_r($config);
         $this->model = new ORMTable($config);
 //        $this->view = new View();
@@ -21,6 +25,7 @@ class Table extends AbstractController
 
     public function actionShow()
     {
+//        echo $this->getCurrentClass();
 //        echo "123";
 //        print_r($this->model->get());
         $headers['id'] = "№";
@@ -32,7 +37,11 @@ class Table extends AbstractController
 
         $this
             ->view
-            ->setData(["table" => $this->model->get(), "comments" => $headers])
+            ->setData([
+                "table" => $this->model->get(),
+                "comments" => $headers,
+                "controllerName" => $this->getCurrentClass()
+            ])
             ->setTemplate("Table/show")
             ->view();
     }
@@ -42,14 +51,17 @@ class Table extends AbstractController
 //        print_r($_GET);
         $this->model->del($_GET['id']);
 //        header("Location:?type=Table&action=show");
-        $this->redirect("?type=Table&action=show");
+        $this->redirect("?type={$this->getCurrentClass()}&action=show");
     }
 
     public function actionShowAdd()
     {
         $this
             ->view
-            ->setData($this->model->columnComments())
+            ->setData([
+                "comments" => $this->model->columnComments(),
+                "controllerName" => $this->getCurrentClass()
+            ])
             ->setTemplate("Table/add")
             ->view();
 
@@ -60,7 +72,7 @@ class Table extends AbstractController
 //        print_r($_POST);
         $this->model->ins($_POST);
 //        header("Location:?type=Table&action=show");
-        $this->redirect("?type=Table&action=show");
+        $this->redirect("?type={$this->getCurrentClass()}&action=show");
 
 
     }
@@ -74,7 +86,12 @@ class Table extends AbstractController
             ->setData(
                 ["comments" => $this->model->columnComments(),
                     "row" => $row,
-                    "id" => $_GET['id']]
+                    "id" => $_GET['id'],
+                    "controllerName" => $this->getCurrentClass()
+
+                ],
+
+
             )
             ->setTemplate("Table/edit")
             ->view();
@@ -85,7 +102,7 @@ class Table extends AbstractController
     {
         $this->model->upd($_GET['id'], $_POST);
 //        header("Location:?type=Table&action=show");
-        $this->redirect("?type=Table&action=show");
+        $this->redirect("?type={$this->getCurrentClass()}&action=show");
 
 
     }
