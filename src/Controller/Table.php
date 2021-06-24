@@ -44,6 +44,7 @@ abstract class Table extends AbstractController
             ])
             ->setTemplate("Table/show")
             ->view();
+
     }
 
     public function actionDel()
